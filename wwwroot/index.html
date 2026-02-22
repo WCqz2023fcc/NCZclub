@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ZH-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农场主ncz电竞</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <img src="images/avatar.png" class="header-logo">
+                <h1>农场主ncz电竞</h1>
+            </div>
+            <div class="header-right">
+                <button id="admin-login-btn" class="admin-login-btn">管理员登录</button>
+            </div>
+        </header>
+
+        <nav class="tab-nav">
+            <div class="tab active" data-tab="recruit">招募</div>
+            <div class="tab" data-tab="ranking">成员排行榜</div>
+        </nav>
+
+        <div id="recruitPage" class="page-show">
+            <div class="club-card">
+                <div class="club-banner"><img src="images/banner.png"></div>
+                <div class="club-info">
+                    <div class="info-left">
+                        <img src="images/avatar.png" class="avatar">
+                        <div>
+                            <h2>农场主ncz电竞</h2>
+                            <p class="price">单价: 0~1000</p>
+                            <p class="game">主营游戏: 暗区突围</p>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="copyService" class="btn-service">💬 客服</button>
+                        <button id="copyLink" class="btn-share">↗️</button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="section">
+                <h3>俱乐部简介</h3>
+                <p id="introShow"></p>
+            </section>
+
+            <section class="section">
+                <h3>技能要求</h3>
+                <p id="skillReqShow" style="font-size:16px; color:#333;"></p>
+            </section>
+        </div>
+
+        <div id="rankingPage" class="page-hide">
+            <div class="section">
+                <h3>俱乐部打手排行榜</h3>
+                <div id="rankList"></div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav admin-nav">
+            <div class="nav-item" onclick="location.href='index.html'">🏠 首页</div>
+            <div class="nav-item" onclick="location.href='workbench.html'">🎮 工作台</div>
+            <div class="nav-item" onclick="location.href='manage.html'">⚙️ 管理中心</div>
+            <div class="nav-item active" onclick="location.href='profile.html'">👤 我的</div>
+        </nav>
+
+        <nav class="bottom-nav user-nav" style="display:none;">
+            <div class="nav-item active" onclick="location.href='index.html'">🏠 首页</div>
+            <div class="nav-item" onclick="location.href='order.html'">🛒 下单</div>
+        </nav>
+
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" id="close-modal">&times;</span>
+                <h3>管理员登录</h3>
+                <div class="form-group"><label>账号</label><input id="username"></div>
+                <div class="form-group"><label>密码</label><input id="password" type="password"></div>
+                <button id="submit-login" class="submit-btn">登录</button>
+                <p id="login-error" class="error-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 双管理员账号（固定，不会被修改）
+        function checkAdmin(username, password) {
+            const admin1 = { username: "admin1", password: "123456" };
+            const admin2 = { username: "admin2", password: "654321" };
+            return (
+                (username === admin1.username && password === admin1.password) ||
+                (username === admin2.username && password === admin2.password)
+            );
+        }
+
+        window.addEventListener('load', () => {
+            document.getElementById("introShow").innerText =
+                localStorage.getItem("clubIntro") || "俱乐部简介待完善";
+
+            document.getElementById("skillReqShow").innerText =
+                localStorage.getItem("skillReq") || "暂无技能要求";
+
+            loadRankList();
+
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            document.querySelector('.admin-nav').style.display = isAdmin ? 'flex' : 'none';
+            document.querySelector('.user-nav').style.display = isAdmin ? 'none' : 'flex';
+
+            const btn = document.getElementById('admin-login-btn');
+            if (isAdmin) {
+                btn.textContent = '登出';
+                btn.style.backgroundColor = '#ff4444';
+            } else {
+                btn.textContent = '管理员登录';
+                btn.style.backgroundColor = '#6a4c93';
+            }
+        });
+
+        // 客服按钮复制微信
+        document.getElementById('copyService').onclick = () => {
+            const wx = "whale2010925";
+            navigator.clipboard.writeText(wx).then(() => {
+                alert("已复制客服微信号，请前往微信添加");
+            });
+        };
+
+        // 分享按钮复制链接
+        document.getElementById('copyLink').onclick = () => {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert("已复制网页");
+            });
+        };
+
+        // 标签页切换
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => {
+            t.addEventListener('click', () => {
+                tabs.forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                if (t.dataset.tab === 'recruit') {
+                    document.getElementById('recruitPage').className = 'page-show';
+                    document.getElementById('rankingPage').className = 'page-hide';
+                } else {
+                    document.getElementById('recruitPage').className = 'page-hide';
+                    document.getElementById('rankingPage').className = 'page-show';
+                }
+            });
+        });
+
+        // 加载排行榜
+        function loadRankList() {
+            const list = JSON.parse(localStorage.getItem("players") || "[]");
+            const box = document.getElementById("rankList");
+            if (list.length === 0) { box.innerHTML = "<p>暂无成员</p>"; return; }
+            box.innerHTML = list.map((p, i) => `
+                <div class="player-item rank-item">
+                    <div class="rank-badge">${i + 1}</div>
+                    <div class="info">
+                        <h4>${p.name}</h4>
+                        <p>KD:${p.kd} 生存:${p.survive} 战斗:${p.fight}</p>
+                        <p class="total">综合：${p.total.toFixed(0)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const loginModal = document.getElementById('login-modal');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+
+        // 登录/登出按钮
+        adminLoginBtn.onclick = () => {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                localStorage.removeItem('isAdmin');
+                alert('已登出');
+                location.reload();
+            } else {
+                loginModal.style.display = 'flex';
+            }
+        };
+
+        // 关闭登录弹窗
+        document.getElementById('close-modal').onclick = () => loginModal.style.display = 'none';
+        window.onclick = e => e.target === loginModal && (loginModal.style.display = 'none');
+
+        // 登录验证（支持双账号）
+        document.getElementById('submit-login').onclick = () => {
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+            const ok = checkAdmin(u, p);
+
+            if (ok) {
+                localStorage.setItem('isAdmin', 'true');
+                loginModal.style.display = 'none';
+                alert('登录成功');
+                location.reload();
+            } else {
+                document.getElementById('login-error').innerText = '账号或密码错误';
+            }
+        };
+    </script>
+</body>
+</html>

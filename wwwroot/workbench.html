@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCZ管理后台</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 15px
+        }
+
+        .box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin: 6px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none
+        }
+
+        .del {
+            background: #dc3545
+        }
+
+        .sync-btn {
+            background: #28a745
+        }
+
+        #list {
+            margin-top: 20px
+        }
+
+        .item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 8px
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h3>上架商品</h3>
+        <input id="code" placeholder="编号">
+        <input id="name" placeholder="名称">
+        <input id="price" placeholder="价格">
+        <textarea id="desc" placeholder="描述" rows="3"></textarea>
+        <button onclick="shangjia()">上架</button>
+    </div>
+
+    <div class="box">
+        <h3>下架商品</h3>
+        <input id="delCode" placeholder="输入编号下架">
+        <button class="del" onclick="xiajia()">下架</button>
+    </div>
+
+    <div class="box">
+        <h3>🔒 同步到全网</h3>
+        <input id="token" placeholder="请输入令牌（下划线前三个字符的反过来输入：phg_XEfMvBBVmOhOPkTeSrjOVo3dfp9ML42xGDH7）">
+        <button class="sync-btn" onclick="syncToGist()">一键同步</button>
+        <p style="font-size:12px;color:#666">提示：把 phg_ 反过来就是正确开头</p>
+    </div>
+
+    <div id="list"></div>
+
+    <script>
+        const GIST_ID = "e6565610efbedd95c38e6b617d8e9db2ab2d744c";
+        let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+        async function loadFromGist() {
+            try {
+                let r = await fetch("https://api.github.com/gists/" + GIST_ID);
+                let d = await r.json();
+                let data = JSON.parse(d.files["orders.json"].content);
+                if (data.length && !orders.length) {
+                    orders = data;
+                    localStorage.setItem("orders", JSON.stringify(orders));
+                }
+            } catch { }
+            showList();
+        }
+
+        function shangjia() {
+            let c = code.value.trim(), n = name.value.trim(), p = price.value.trim();
+            if (!c || !n || !p) return alert("请填写完整");
+            orders.push({ code: c, name: n, price: price.value, desc: desc.value });
+            localStorage.setItem("orders", JSON.stringify(orders));
+            showList();
+            alert("上架成功");
+        }
+
+        function xiajia() {
+            orders = orders.filter(o => o.code != delCode.value);
+            localStorage.setItem("orders", JSON.stringify(orders));
+            showList();
+            alert("下架成功");
+        }
+
+        function showList() {
+            list.innerHTML = orders.map(o =>
+                `<div class="item">${o.code}｜${o.name}｜${o.price}元</div>`
+            ).join("");
+        }
+
+        async function syncToGist() {
+            let t = document.getElementById("token").value.trim();
+            if (!t) return alert("请输入令牌");
+
+            await fetch("https://api.github.com/gists/" + GIST_ID, {
+                method: "PATCH",
+                headers: { Authorization: "token " + t, "Content-Type": "application/json" },
+                body: JSON.stringify({ files: { "orders.json": { content: JSON.stringify(orders, null, 2) } } })
+            });
+            alert("同步成功！全网已更新");
+        }
+
+        loadFromGist();
+    </script>
+</body>
+</html>

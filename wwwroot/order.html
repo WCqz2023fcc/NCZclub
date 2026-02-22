@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>商品下单页</title>
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        body {
+            background: #f8f8f8;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .order-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+
+        .order-cate {
+            font-size: 12px;
+            color: #1989fa;
+            margin-bottom: 5px;
+        }
+
+        .order-name {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .order-price {
+            font-size: 20px;
+            color: #ff4444;
+            margin-bottom: 8px;
+        }
+
+        .order-desc {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .order-sell {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 12px 0;
+            background: #1989fa;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .empty-tip {
+            text-align: center;
+            padding: 50px 0;
+            color: #999;
+            font-size: 16px;
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">可下单商品</h1>
+        <!-- 订单渲染容器 -->
+        <div id="orderList"></div>
+    </div>
+
+    <script>
+        // 你的GIST公开地址（固定，所有设备共用，无Token）
+        const GIST_ID = "e7173ee4cd4d41b6bfaae23673e2c7ae";
+        const GIST_RAW_URL = `https://gist.githubusercontent.com/WCqz2023fcc/${GIST_ID}/raw/orders.json`;
+        let orderList = [];
+
+        // 拉取Gist最新订单（无鉴权，所有设备可访问，30秒自动刷新保证实时）
+        async function fetchSyncOrders() {
+            try {
+                const res = await fetch(GIST_RAW_URL, { cache: 'no-cache' });
+                if (res.ok) {
+                    const data = await res.json();
+                    orderList = Array.isArray(data) ? data : [];
+                    renderOrderCards(); // 渲染订单
+                }
+            } catch (e) {
+                console.log("网络临时波动，稍后自动刷新");
+            }
+            // 每30秒自动拉取最新数据，实现多设备实时同步
+            setTimeout(fetchSyncOrders, 30000);
+        }
+
+        // 渲染订单卡片
+        function renderOrderCards() {
+            const container = document.getElementById('orderList');
+            // 无订单时显示提示
+            if (orderList.length === 0) {
+                container.innerHTML = '<div class="empty-tip">暂无可下单商品</div>';
+                return;
+            }
+            // 按分类排序，和工作台保持一致
+            const sortedOrders = orderList.sort((a, b) =>
+                (a.cate || '').toLowerCase().localeCompare((b.cate || '').toLowerCase())
+            );
+            // 渲染所有订单
+            container.innerHTML = sortedOrders.map(item => `
+                    <div class="order-card">
+                        <div class="order-cate">${item.cate || '未分类'}</div>
+                        <div class="order-name">${item.name}</div>
+                        <div class="order-price">¥${item.price}</div>
+                        <div class="order-desc">${item.desc || '无商品说明'}</div>
+                        <div class="order-sell">已售 ${item.sell || 0} 单</div>
+                        <!-- 下单按钮：可自定义点击逻辑 -->
+                        <button class="order-btn" onclick="alert('下单逻辑已触发，商品：${item.name}')">立即下单</button>
+                    </div>
+                `).join('');
+        }
+
+        // 页面加载立即拉取订单，所有设备打开即见最新商品
+        window.onload = fetchSyncOrders;
+        // 移动端点击无延迟
+        document.addEventListener('touchstart', () => { }, false);
+    </script>
+</body>
+</html>
