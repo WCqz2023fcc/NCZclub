@@ -75,7 +75,7 @@
         <h3>同步到全网</h3>
         <input id="token" placeholder="请输入以 G 开头的 GitHub 令牌">
         <button class="sync-btn" onclick="syncToGist()">一键同步</button>
-        <p style="font-size:12px;color:#666">把下划线之前的字符倒过来写：phg_XEfMvBBVmOhOPkTeSrjOVo3dfp9ML42xGDH7</p>
+        <p style="font-size:12px;color:#666">把下划线之前的字符倒过来写：phg_oY7Q2IE9wzhg0uGxZjdqHTjpwhZhBk0xis9K</p>
     </div>
 
     <div id="list"></div>
@@ -83,7 +83,7 @@
     <script>
         // 从 localStorage 读取订单数据，如果没有则初始化空数组
         let orders = JSON.parse(localStorage.getItem("orders") || "[]");
-        const GIST_ID = "e6565610efbedd95c38e6b617d8e9db2ab2d744c";
+        const GIST_ID = "6b651418deefcbb3a61bb6b244eb762f";
 
         // 页面加载时，先从 Gist 加载数据
         window.onload = function () {
