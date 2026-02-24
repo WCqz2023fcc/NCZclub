@@ -101,5 +101,5 @@ G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\cwfo7o04kf-
 G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\xmd0wwcsxy-{0}-acshv9p7rj-acshv9p7rj.gz
 G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\NCZclub.sourcelink.json
 G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\3mj1g94n32-{0}-s2zmkjie7x-s2zmkjie7x.gz
-G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\0cj0uuwgf2-{0}-nfrjm9r9v6-nfrjm9r9v6.gz
-G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\qxr4blcjvb-{0}-0jdnc8mdj9-0jdnc8mdj9.gz
+G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\0cj0uuwgf2-{0}-dxsuw871tf-dxsuw871tf.gz
+G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\qxr4blcjvb-{0}-jyc3j1degs-jyc3j1degs.gz
