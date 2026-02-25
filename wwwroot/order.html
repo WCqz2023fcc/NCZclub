@@ -1,131 +1,340 @@
 ﻿<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="utf-8">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>下单</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>NCZClub 商品列表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+
+        body {
+            background: #ffffff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 顶部游戏栏 */
+        .top-game-bar {
+            background: #6a4c93;
+            padding: 12px 16px;
+            display: flex;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .game-tab {
+            background: #fff;
+            color: #6a4c93;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+            .game-tab.active {
+                background: #553a7a;
+                color: #fff;
+            }
+
+        /* 主体布局 */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* 左侧分类栏 */
+        .sidebar {
+            width: 120px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            padding: 16px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-category {
+            padding: 12px 12px;
+            cursor: pointer;
+            color: #333;
+            font-size: 14px;
+        }
+
+            .sidebar-category.active {
+                background: #6a4c93;
+                color: #fff;
+            }
+
+        /* 商品区 */
+        .content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background: #fff;
+        }
+
+        .goods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(120px, 180px));
+            gap: 16px;
+            justify-content: flex-start;
+        }
+
+        .good-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .good-img {
+            width: 100%;
+            height: 0;
+            padding-top: 100%;
+            position: relative;
+            background: #f0e6f9;
+        }
+
+            .good-img img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .good-info {
+            padding: 10px;
+        }
+
+        .good-name {
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .good-price {
+            font-size: 15px;
+            color: #6a4c93;
+            font-weight: bold;
+            margin: 4px 0 8px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 7px;
+            background: #6a4c93;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            background: #6a4c93;
+            padding: 12px 0;
+            display: flex;
+            justify-content: space-around;
+            position: sticky;
+            bottom: 0;
+            z-index: 99;
+        }
+
+        .nav-item {
+            color: #fff;
+            font-size: 14px;
+            width: 50%;
+            text-align: center;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+            .nav-item.active {
+                opacity: 1;
+                font-weight: bold;
+            }
+
+        /* 紫白自定义弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 280px;
+            border-radius: 14px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .modal-text {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            background: #6a4c93;
+            color: #fff;
+            border: none;
+            padding: 9px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="app-container shop-layout">
-        <header class="app-header">
-            <div class="header-left">
-                <h1>商城下单</h1>
-            </div>
-        </header>
+    <div class="top-game-bar" id="topGameBar"></div>
 
-        <!-- 游戏切换栏（和你排行榜同一个位置） -->
-        <div class="tab-bar">
-            <div class="tab-item active" onclick="switchGame('暗区突围')">暗区突围</div>
-            <div class="tab-item" onclick="switchGame('三角洲行动')">三角洲行动</div>
+    <div class="main-container">
+        <div class="sidebar" id="sidebar"></div>
+        <div class="content" id="content"></div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="location.href='index.html'">首页</div>
+        <div class="nav-item">订单</div>
+    </div>
+
+    <!-- 只弹你自己的弹窗 -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-text">已复制客服微信，请前往微信添加</div>
+            <button class="modal-btn" onclick="closeModal()">确定</button>
         </div>
+    </div>
 
-        <div class="shop-container">
-            <aside class="category-sidebar" id="categorySidebar">
-                <div id="categoryList">加载中...</div>
-            </aside>
+    <script>
+        const GIST_ID = "ef4765e8027d7b3345f66fe47e6f04a4";
+        const TARGET_FILE = "order.json";
+        const WECHAT = "whale2010925";
 
-            <main class="product-content">
-                <div class="product-grid" id="productGrid">
-                    <div class="empty-placeholder">加载商品中...</div>
+        let orderData = {};
+        let currentGame = "";
+        let currentCate = "";
+
+        window.onload = async () => {
+            await loadData();
+            renderAll();
+        };
+
+        async function loadData() {
+            try {
+                const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+                const gist = await res.json();
+                if (gist.files?.[TARGET_FILE]) {
+                    orderData = JSON.parse(gist.files[TARGET_FILE].content);
+                } else {
+                    orderData = { "暗区突围": {}, "三角洲行动": {} };
+                }
+            } catch (e) {
+                orderData = { "暗区突围": {}, "三角洲行动": {} };
+            }
+        }
+
+        function renderAll() {
+            const games = Object.keys(orderData);
+            if (!currentGame) currentGame = games[0];
+
+            // 顶部游戏
+            const gameBar = document.getElementById("topGameBar");
+            gameBar.innerHTML = games.map(g => `
+          <button class="game-tab ${g === currentGame ? 'active' : ''}" onclick="setGame('${g}')">${g}</button>
+        `).join("");
+
+            // 分类
+            const categories = Object.keys(orderData[currentGame] || {});
+            if (!currentCate || !categories.includes(currentCate)) {
+                currentCate = categories[0] || "";
+            }
+
+            const sidebar = document.getElementById("sidebar");
+            if (categories.length === 0) {
+                sidebar.innerHTML = `<div class="sidebar-category">暂无分类</div>`;
+            } else {
+                sidebar.innerHTML = categories.map(c => `
+            <div class="sidebar-category ${c === currentCate ? 'active' : ''}" onclick="setCate('${c}')">${c}</div>
+          `).join("");
+            }
+
+            // 商品
+            const content = document.getElementById("content");
+            const goods = orderData[currentGame]?.[currentCate] || [];
+            if (goods.length === 0) {
+                content.innerHTML = `<div style='text-align:center;padding:40px;color:#999'>暂无商品</div>`;
+                return;
+            }
+
+            content.innerHTML = `
+          <div class="goods-grid">
+            ${goods.map(item => {
+                const [name, _, img, price, code] = item;
+                return `
+                <div class="good-card">
+                  <div class="good-img"><img src="${img || ''}" onerror="this.style.display='none'"></div>
+                  <div class="good-info">
+                    <div class="good-name">${name || '未命名'}</div>
+                    <div class="good-price">¥${price || 0}</div>
+                    <button class="buy-btn" onclick="buyNow()">立即购买</button>
+                  </div>
                 </div>
-            </main>
-        </div>
+              `
+            }).join('')}
+          </div>
+        `;
+        }
 
-        <nav class="bottom-nav">
-            <div class="nav-item" onclick="location.href='index.html'">首页</div>
-            <div class="nav-item active">下单</div>
-        </nav>
-    </div>
+        // 立即购买 —— 无浏览器提示！只弹你的弹窗
+        function buyNow() {
+            // 静默复制，不弹浏览器提示
+            const textArea = document.createElement("textarea");
+            textArea.value = WECHAT;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            textArea.remove();
 
-    <script>const GIST_ID = "ef4765e8027d7b3345f66fe47e6f04a4";
-const FILE_NAME = "club.json";
+            // 只显示你的紫白弹窗
+            document.getElementById("modal").style.display = "flex";
+        }
 
-let allData = {}; // 三维结构：{游戏:{分类:[[商品]]}}
-let currentGame = "暗区突围";
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
 
-window.onload = async () => {
-  await loadOrderData();
-  renderAll();
-};
+        function setGame(game) {
+            currentGame = game;
+            currentCate = "";
+            renderAll();
+        }
 
-async function loadOrderData() {
-  try {
-    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
-    const data = await res.json();
-    const content = data.files[FILE_NAME].content;
-    allData = JSON.parse(content) || {};
-  } catch (e) {
-    allData = { "暗区突围": {}, "三角洲行动": {} };
-  }
-}
-
-function switchGame(game) {
-  currentGame = game;
-  document.querySelectorAll('.tab-item').forEach((t,i)=>{
-    t.classList.toggle('active', i==(game=='暗区突围'?0:1));
-  });
-  renderAll();
-}
-
-function renderAll(){
-  renderCategories();
-  const firstCate = Object.keys(allData[currentGame]||{})[0];
-  renderProducts(firstCate);
-}
-
-function renderCategories() {
-  const listEl = document.getElementById("categoryList");
-  const gameData = allData[currentGame] || {};
-  const keys = Object.keys(gameData);
-
-  if (keys.length === 0) {
-    document.getElementById("categorySidebar").style.display = "none";
-    document.getElementById("productGrid").innerHTML = `<div class="empty-placeholder">暂无商品</div>`;
-    return;
-  }
-
-  document.getElementById("categorySidebar").style.display = "block";
-  listEl.innerHTML = "";
-
-  keys.forEach(cate => {
-    const div = document.createElement("div");
-    div.className = "category-item";
-    div.innerText = cate;
-    div.onclick = () => renderProducts(cate);
-    listEl.appendChild(div);
-  });
-}
-
-function renderProducts(cate) {
-  const grid = document.getElementById("productGrid");
-  const gameData = allData[currentGame] || {};
-  const list = gameData[cate] || [];
-
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="empty-placeholder">该分类暂无商品</div>`;
-    return;
-  }
-
-  let html = "";
-  list.forEach(item => {
-    const title = item[0] || "无名商品";
-    const desc = item[1] || "";
-    const img = item[2] || "";
-    const price = item[3] || "0";
-    html += `
-    <div class="product-card">
-      <img src="${img}" class="product-img">
-      <div class="product-info">
-        <h4 class="product-title">${title}</h4>
-        <p class="product-desc">${desc}</p>
-        <p class="product-price">¥${price}</p>
-      </div>
-    </div>
-    `;
-  });
-  grid.innerHTML = html;
-}</script>
+        function setCate(cate) {
+            currentCate = cate;
+            renderAll();
+        }
+    </script>
 </body>
 </html>
