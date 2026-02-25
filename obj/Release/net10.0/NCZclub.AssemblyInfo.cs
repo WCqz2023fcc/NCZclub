@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NCZclub")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+75bedb7949f83d0c1dd5cf77810f671b4e4f2b6d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f6860c57d9c01691689f72e5b2e61add15436ea2")]
 [assembly: System.Reflection.AssemblyProductAttribute("NCZclub")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NCZclub")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
