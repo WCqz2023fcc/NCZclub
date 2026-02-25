@@ -2,93 +2,84 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-    background-color: #f5f5f5;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #f6f7f9;
     color: #333;
+    padding-bottom: 70px; /* 给底部导航留位置 */
 }
 
 .app-container {
-    max-width: 428px;
+    max-width: 480px;
     margin: 0 auto;
-    background-color: #ffffff;
-    min-height: 100vh;
-    position: relative;
-    padding-bottom: 60px;
+    overflow: hidden;
 }
 
-/* 头部标题栏 */
+/* 顶部标题栏 */
 .app-header {
+    background: #6a4c93;
+    color: white;
+    padding: 14px 16px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f0f0f0;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .header-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .header-logo {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    object-fit: cover;
 }
 
-.app-header h1 {
+.header-left h1 {
     font-size: 18px;
     font-weight: 600;
-    color: #333;
-}
-
-/* 管理员登录按钮 */
-.header-right {
-    display: flex;
-    align-items: center;
 }
 
 .admin-login-btn {
-    padding: 6px 12px;
-    background-color: #6a4c93;
-    color: #fff;
+    background: #ffffff33;
+    color: white;
     border: none;
-    border-radius: 16px;
-    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 13px;
     cursor: pointer;
 }
 
-    .admin-login-btn:hover {
-        background-color: #553a7a;
-    }
-
-/* 标签页导航 */
-.tab-nav {
+/* 顶部选项卡 */
+.tab-bar {
     display: flex;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+    border-bottom: 1px solid #eee;
 }
 
-.tab {
+.tab-item {
     flex: 1;
     text-align: center;
     padding: 12px 0;
-    font-size: 16px;
+    font-size: 15px;
     color: #666;
     cursor: pointer;
     position: relative;
 }
 
-    .tab.active {
+    .tab-item.active {
         color: #6a4c93;
-        font-weight: 600;
+        font-weight: 500;
     }
 
-        .tab.active::after {
+        .tab-item.active::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -96,203 +87,164 @@ body {
             transform: translateX(-50%);
             width: 40px;
             height: 2px;
-            background-color: #6a4c93;
+            background: #6a4c93;
         }
 
-/* 俱乐部卡片 */
-.club-card {
-    background-color: #ffffff;
-    margin: 8px 0;
-    padding: 0;
+/* 选项卡内容区域，默认隐藏 */
+.tab-content {
+    display: none;
 }
 
-.club-banner {
-    width: 100%;
-    height: 320px;
-    background: #f8f5f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-    .club-banner img {
-        max-width: 90%;
-        max-height: 90%;
+    .tab-content.active {
+        display: block;
     }
 
-.club-info {
-    padding: 16px;
+/* 俱乐部大图 Banner (1:1，无文字) */
+.club-banner {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
+    background: url('images/banner.png') center center / cover no-repeat;
+    background-color: #6a4c93;
+    /* 去掉了文字，只显示图片或背景色 */
 }
 
-.info-left {
+/* 内容区域 (带间距) */
+.main-content {
+    padding: 15px 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 卡片之间的垂直间隔 */
+}
+
+/* 卡片通用样式 */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 文字框专用样式 (1:1 正方形) */
+.text-card {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
+    margin: 12px auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+    .text-card p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+        word-wrap: break-word;
+    }
+
+/* 排行榜卡片 */
+.rank-card {
+    padding-bottom: 20px;
+}
+
+.player-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-}
-
-.info-left h2 {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.price, .game {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 2px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-service, .btn-share {
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
+.rank-badge {
+    width: 28px;
+    height: 28px;
+    background: #6a4c93;
+    color: white;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 4px;
-}
-
-.btn-service {
-    background-color: #ff7d00;
-    color: #ffffff;
-}
-
-.btn-share {
-    background-color: #6a4c93;
-    color: #ffffff;
-    padding: 8px 12px;
-}
-
-/* 通用区块 */
-.section {
-    background-color: #ffffff;
-    margin: 8px 0;
-    padding: 16px;
-}
-
-    .section h3 {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 12px;
-    }
-
-.intro-tip {
-    color: #999;
-    font-size: 14px;
-}
-
-.link {
-    color: #6a4c93;
-    text-decoration: none;
-}
-
-.arrow {
-    color: #6a4c93;
+    justify-content: center;
+    font-size: 12px;
     font-weight: bold;
 }
 
-/* 技能要求 */
-.skill-tag {
-    display: inline-block;
-    padding: 4px 12px;
-    background-color: #f0e6ff;
+.info h4 {
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.info p {
+    font-size: 12px;
+    color: #666;
+}
+
+.total {
     color: #6a4c93;
-    border-radius: 16px;
-    font-size: 16px;
-    margin-bottom: 16px;
-    border-bottom: 2px solid #6a4c93;
+    font-weight: 500;
 }
-
-.empty-state {
-    text-align: center;
-    color: #999;
-    padding: 20px 0;
-}
-
-    .empty-state img {
-        width: 180px;
-        height: auto;
-        margin-bottom: 12px;
-    }
-
-    .empty-state p {
-        font-size: 14px;
-    }
 
 /* 底部导航 */
 .bottom-nav {
     position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 428px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: white;
     display: flex;
+    align-items: center;
     justify-content: space-around;
-    padding: 8px 0;
-    background-color: #ffffff;
-    border-top: 1px solid #f0f0f0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    z-index: 999;
 }
 
 .nav-item {
-    text-align: center;
-    font-size: 12px;
+    font-size: 13px;
     color: #666;
+    text-align: center;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
 
     .nav-item.active {
         color: #6a4c93;
+        font-weight: 500;
     }
 
-    .nav-item .icon {
-        font-size: 20px;
-        display: block;
-        margin-bottom: 4px;
-    }
-
-/* 登录弹窗 */
+/* 弹窗样式 */
 .modal {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
     align-items: center;
-    z-index: 9999;
+    justify-content: center;
+    z-index: 1000;
 }
 
 .modal-content {
-    background-color: #fff;
-    padding: 24px;
-    border-radius: 12px;
+    background: white;
     width: 90%;
-    max-width: 320px;
+    max-width: 360px;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     position: relative;
 }
 
 .close-btn {
     position: absolute;
-    top: 12px;
+    top: 16px;
     right: 16px;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     color: #999;
 }
@@ -303,115 +255,336 @@ body {
 
     .form-group label {
         display: block;
-        margin-bottom: 4px;
         font-size: 14px;
-        color: #333;
+        color: #444;
+        margin-bottom: 6px;
     }
 
     .form-group input {
         width: 100%;
-        padding: 8px 12px;
+        padding: 12px;
         border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 14px;
+        border-radius: 12px;
+        font-size: 15px;
     }
 
 .submit-btn {
     width: 100%;
-    padding: 10px;
-    background-color: #6a4c93;
-    color: #fff;
+    padding: 12px;
+    background: #6a4c93;
+    color: white;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    margin-top: 8px;
 }
 
 .error-text {
-    color: #ff4d4f;
+    color: #ff4444;
     font-size: 12px;
     margin-top: 8px;
     text-align: center;
-}
-
-.order-box {
-    background: #fff;
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    border: 1px solid #eee;
-}
-
-.order-item {
-    background: #f9f9f9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    border-left: 3px solid #6a4c93;
-}
-
-.user-order {
-    border-left: 3px solid #ff7d00;
-}
-
-.buy-btn {
-    background: #ff7d00 !important;
-}
-
-/* 分页显示 */
-.page-show {
-    display: block;
 }
 
 .page-hide {
     display: none;
 }
 
-/* 打手卡片 */
-.player-item {
-    background: #f9f9f9;
-    padding: 14px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    border-left: 3px solid #6a4c93;
+.page-show {
+    display: block;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #f6f7f9;
+    color: #333;
+    padding-bottom: 70px; /* 给底部导航留位置 */
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* 顶部标题栏 */
+.app-header {
+    background: #6a4c93;
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    object-fit: cover;
+}
+
+.header-left h1 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.admin-login-btn {
+    background: #ffffff33;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* 顶部选项卡 */
+.tab-bar {
+    display: flex;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 15px;
+    color: #666;
+    cursor: pointer;
     position: relative;
 }
 
+    .tab-item.active {
+        color: #6a4c93;
+        font-weight: 500;
+    }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: #6a4c93;
+        }
+
+/* 选项卡内容区域，默认隐藏 */
+.tab-content {
+    display: none;
+}
+
+    .tab-content.active {
+        display: block;
+    }
+
+/* 俱乐部大图 Banner (1:1，无文字) */
+.club-banner {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
+    background: url('images/banner.png') center center / cover no-repeat;
+    background-color: #6a4c93;
+    /* 去掉了文字，只显示图片或背景色 */
+}
+
+/* 内容区域 (带间距) */
+.main-content {
+    padding: 15px 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 卡片之间的垂直间隔 */
+}
+
+/* 卡片通用样式 */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 文字框专用样式 (1:1 正方形) */
+.text-card {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
+    margin: 12px auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+    .text-card p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+        word-wrap: break-word;
+    }
+
+/* 排行榜卡片 */
+.rank-card {
+    padding-bottom: 20px;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
 .rank-badge {
-    position: absolute;
-    left: 10px;
-    top: 14px;
     width: 28px;
     height: 28px;
     background: #6a4c93;
-    color: #fff;
+    color: white;
     border-radius: 50%;
-    text-align: center;
-    line-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
     font-weight: bold;
 }
 
-.player-item .info {
-    padding-left: 40px;
+.info h4 {
+    font-size: 15px;
+    margin-bottom: 4px;
 }
 
-.player-item h4 {
-    margin: 0 0 4px 0;
-    font-size: 16px;
-}
-
-.player-item p {
-    margin: 2px 0;
-    font-size: 14px;
+.info p {
+    font-size: 12px;
     color: #666;
 }
 
-.player-item .total {
+.total {
     color: #6a4c93;
-    font-weight: bold;
-    margin-top: 4px;
+    font-weight: 500;
 }
 
-.rank-item {
-    border-left: 3px solid #ff7d00;
+/* 底部导航 */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    z-index: 999;
+}
+
+.nav-item {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+    .nav-item.active {
+        color: #6a4c93;
+        font-weight: 500;
+    }
+
+/* 弹窗样式 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 360px;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-size: 15px;
+    }
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #6a4c93;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    margin-top: 8px;
+}
+
+.error-text {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.page-hide {
+    display: none;
+}
+
+.page-show {
+    display: block;
 }
