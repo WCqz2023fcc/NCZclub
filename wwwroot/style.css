@@ -1,590 +1,247 @@
+/* ==============================================
+   苹果iOS风格 · 轻透毛玻璃 · 浅紫清爽版
+   适用于 index.html + order.html
+============================================== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: #f6f7f9;
-    color: #333;
-    padding-bottom: 70px; /* 给底部导航留位置 */
+html, body {
+  min-height: 100vh;
+  background: #f2f2f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1c1c1e;
 }
 
 .app-container {
-    max-width: 480px;
-    margin: 0 auto;
-    overflow: hidden;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 80px;
 }
 
-/* 顶部标题栏 */
+/* 头部 */
 .app-header {
-    background: #6a4c93;
-    color: white;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
 }
 
 .header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .header-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #fff;
-    object-fit: cover;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #6a4c93;
 }
 
-.header-left h1 {
-    font-size: 18px;
-    font-weight: 600;
+.app-header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1c1c1e;
 }
 
-.admin-login-btn {
-    background: #ffffff33;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-/* 顶部选项卡 */
+/* 选项卡 */
 .tab-bar {
-    display: flex;
-    background: #fff;
-    border-bottom: 1px solid #eee;
+  display: flex;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
 }
 
 .tab-item {
-    flex: 1;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 15px;
-    color: #666;
-    cursor: pointer;
-    position: relative;
+  flex: 1;
+  text-align: center;
+  padding: 14px;
+  color: #8a8a8e;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-    .tab-item.active {
-        color: #6a4c93;
-        font-weight: 500;
-    }
+.tab-item.active {
+  color: #6a4c93;
+  border-bottom: 2px solid #6a4c93;
+}
 
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 2px;
-            background: #6a4c93;
-        }
-
-/* 选项卡内容区域，默认隐藏 */
 .tab-content {
-    display: none;
+  display: none;
+  padding: 12px;
 }
 
-    .tab-content.active {
-        display: block;
-    }
+.tab-content.active {
+  display: block;
+}
 
-/* 俱乐部大图 Banner (1:1，无文字) */
+/* 俱乐部大图 */
 .club-banner {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
-    background: url('images/banner.png') center center / cover no-repeat;
-    background-color: #6a4c93;
-    /* 去掉了文字，只显示图片或背景色 */
+  width: 100%;
+  height: 160px;
+  background: rgba(106, 76, 147, 0.1);
+  border-radius: 16px;
+  margin-bottom: 12px;
 }
 
-/* 内容区域 (带间距) */
-.main-content {
-    padding: 15px 15px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* 卡片之间的垂直间隔 */
-}
-
-/* 卡片通用样式 */
+/* 苹果毛玻璃卡片 */
 .card {
-    background: white;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
-/* 文字框专用样式 (1:1 正方形) */
-.text-card {
-    width: 100%;
-    max-width: 280px;
-    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
-    margin: 12px auto 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+.card h3 {
+  font-size: 16px;
+  color: #6a4c93;
+  margin-bottom: 12px;
+  padding-left: 10px;
+  border-left: 3px solid #6a4c93;
 }
 
-    .text-card p {
-        font-size: 14px;
-        line-height: 1.6;
-        color: #555;
-        word-wrap: break-word;
-    }
-
-/* 排行榜卡片 */
-.rank-card {
-    padding-bottom: 20px;
+/* 文本正常清晰 */
+.text-card,
+.markdown-content {
+  width: 100%;
+  color: #1c1c1e;
+  line-height: 1.7;
 }
 
-.player-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+
+.markdown-content strong {
+  color: #6a4c93;
+}
+
+/* 排行榜 */
+.rank-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .rank-badge {
-    width: 28px;
-    height: 28px;
-    background: #6a4c93;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.info h4 {
-    font-size: 15px;
-    margin-bottom: 4px;
-}
-
-.info p {
-    font-size: 12px;
-    color: #666;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #6a4c93;
+  color: #fff;
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
 .total {
-    color: #6a4c93;
-    font-weight: 500;
+  color: #6a4c93;
+  font-weight: 600;
 }
 
 /* 底部导航 */
 .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-    z-index: 999;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  z-index: 99;
 }
 
 .nav-item {
-    font-size: 13px;
-    color: #666;
-    text-align: center;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+  flex: 1;
+  text-align: center;
+  padding: 14px;
+  color: #8a8a8e;
 }
 
-    .nav-item.active {
-        color: #6a4c93;
-        font-weight: 500;
-    }
-
-/* 弹窗样式 */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+.nav-item.active {
+  color: #6a4c93;
 }
 
-.modal-content {
-    background: white;
-    width: 90%;
-    max-width: 360px;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    position: relative;
+/* ==================== ORDER.HTML 苹果风格 ==================== */
+.order-container {
+  padding: 16px;
 }
 
-.close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #999;
+.order-title {
+  font-size: 18px;
+  color: #6a4c93;
+  margin: 10px 0 16px;
+  padding-left: 10px;
+  border-left: 3px solid #6a4c93;
+}
+
+.order-form {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .form-group {
-    margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
-    .form-group label {
-        display: block;
-        font-size: 14px;
-        color: #444;
-        margin-bottom: 6px;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        font-size: 15px;
-    }
-
-.submit-btn {
-    width: 100%;
-    padding: 12px;
-    background: #6a4c93;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    margin-top: 8px;
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #6a4c93;
+  font-size: 14px;
 }
 
-.error-text {
-    color: #ff4444;
-    font-size: 12px;
-    margin-top: 8px;
-    text-align: center;
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.04);
+  border: none;
+  border-radius: 10px;
+  color: #1c1c1e;
+  font-size: 14px;
 }
 
-.page-hide {
-    display: none;
+.order-btn {
+  width: 100%;
+  padding: 12px;
+  background: #6a4c93;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
-.page-show {
-    display: block;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: #f6f7f9;
-    color: #333;
-    padding-bottom: 70px; /* 给底部导航留位置 */
+.order-item {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.app-container {
-    max-width: 480px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-/* 顶部标题栏 */
-.app-header {
-    background: #6a4c93;
-    color: white;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.header-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #fff;
-    object-fit: cover;
-}
-
-.header-left h1 {
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.admin-login-btn {
-    background: #ffffff33;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-/* 顶部选项卡 */
-.tab-bar {
-    display: flex;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-}
-
-.tab-item {
-    flex: 1;
-    text-align: center;
-    padding: 12px 0;
-    font-size: 15px;
-    color: #666;
-    cursor: pointer;
-    position: relative;
-}
-
-    .tab-item.active {
-        color: #6a4c93;
-        font-weight: 500;
-    }
-
-        .tab-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 2px;
-            background: #6a4c93;
-        }
-
-/* 选项卡内容区域，默认隐藏 */
-.tab-content {
-    display: none;
-}
-
-    .tab-content.active {
-        display: block;
-    }
-
-/* 俱乐部大图 Banner (1:1，无文字) */
-.club-banner {
-    width: 100%;
-    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
-    background: url('images/banner.png') center center / cover no-repeat;
-    background-color: #6a4c93;
-    /* 去掉了文字，只显示图片或背景色 */
-}
-
-/* 内容区域 (带间距) */
-.main-content {
-    padding: 15px 15px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* 卡片之间的垂直间隔 */
-}
-
-/* 卡片通用样式 */
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* 文字框专用样式 (1:1 正方形) */
-.text-card {
-    width: 100%;
-    max-width: 280px;
-    aspect-ratio: 1 / 1; /* 强制 1:1 比例 */
-    margin: 12px auto 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-    .text-card p {
-        font-size: 14px;
-        line-height: 1.6;
-        color: #555;
-        word-wrap: break-word;
-    }
-
-/* 排行榜卡片 */
-.rank-card {
-    padding-bottom: 20px;
-}
-
-.player-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.rank-badge {
-    width: 28px;
-    height: 28px;
-    background: #6a4c93;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.info h4 {
-    font-size: 15px;
-    margin-bottom: 4px;
-}
-
-.info p {
-    font-size: 12px;
-    color: #666;
-}
-
-.total {
-    color: #6a4c93;
-    font-weight: 500;
-}
-
-/* 底部导航 */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-    z-index: 999;
-}
-
-.nav-item {
-    font-size: 13px;
-    color: #666;
-    text-align: center;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-    .nav-item.active {
-        color: #6a4c93;
-        font-weight: 500;
-    }
-
-/* 弹窗样式 */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: white;
-    width: 90%;
-    max-width: 360px;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    position: relative;
-}
-
-.close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #999;
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-    .form-group label {
-        display: block;
-        font-size: 14px;
-        color: #444;
-        margin-bottom: 6px;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        font-size: 15px;
-    }
-
-.submit-btn {
-    width: 100%;
-    padding: 12px;
-    background: #6a4c93;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 15px;
-    margin-top: 8px;
-}
-
-.error-text {
-    color: #ff4444;
-    font-size: 12px;
-    margin-top: 8px;
-    text-align: center;
-}
-
-.page-hide {
-    display: none;
-}
-
-.page-show {
-    display: block;
+.order-item h4 {
+  color: #6a4c93;
+  margin-bottom: 6px;
 }

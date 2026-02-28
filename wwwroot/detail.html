@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="utf-8">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>商品详情 - NCZClub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+
+        body {
+            background: #ffffff;
+            color: #333;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 80px; /* 给底部按钮留间距，防止内容被挡 */
+        }
+
+        .back-btn {
+            background: #6a4c93;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        /* 仅图片保留容器，1:1比例 */
+        .goods-img {
+            width: 100%;
+            height: 0;
+            padding-top: 100%; /* 1:1 等比 */
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+            .goods-img img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 8px;
+            }
+        /* 商品信息无外框，直接展示 */
+        .goods-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .goods-price {
+            font-size: 26px;
+            font-weight: bold;
+            color: #6a4c93;
+            margin-bottom: 20px;
+        }
+
+        .desc-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .goods-desc {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+        }
+        /* 联系客服按钮：固定底部、不超屏、左右留边 */
+        .order-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #6a4c93;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 0;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 99;
+        }
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-box {
+            background: #fff;
+            width: 280px;
+            border-radius: 14px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .modal-text {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            background: #6a4c93;
+            color: #fff;
+            border: none;
+            padding: 9px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .empty-tip {
+            text-align: center;
+            padding: 50px 0;
+            color: #999;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">← 返回商品列表</button>
+
+    <!-- 仅图片保留容器 -->
+    <div class="goods-img" id="goodsImg"></div>
+
+    <!-- 商品信息无外框 -->
+    <div id="goodsInfo" style="display: none;">
+        <div class="goods-name" id="goodsName"></div>
+        <div class="goods-price" id="goodsPrice"></div>
+        <div class="desc-title">商品信息</div>
+        <div class="goods-desc" id="goodsDesc"></div>
+    </div>
+
+    <!-- 空数据提示 -->
+    <div class="empty-tip" id="emptyTip">商品信息加载中...</div>
+
+    <!-- 底部固定联系客服按钮 -->
+    <button class="order-btn" onclick="copyOrderInfo()">联系客服</button>
+
+    <!-- 弹窗 -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <div class="modal-text" id="modalText">商品信息复制成功！</div>
+            <button class="modal-btn" onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <script>const GIST_ID = "ef4765e8027d7b3345f66fe47e6f04a4";
+        const TARGET_FILE = "order.json";
+        const WECHAT = "whale2010925";
+
+        window.onload = async () => {
+            const searchParams = new URLSearchParams(window.location.search);
+            const game = decodeURIComponent(searchParams.get("game") || "");
+            const code = decodeURIComponent(searchParams.get("code") || "");
+
+            if (!game || !code) {
+                document.getElementById("emptyTip").innerText = "无效的商品链接！";
+                return;
+            }
+
+            let orderData = {};
+            try {
+                const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+                const gist = await res.json();
+                if (gist.files?.[TARGET_FILE]) {
+                    orderData = JSON.parse(gist.files[TARGET_FILE].content);
+                }
+            } catch (e) {
+                document.getElementById("emptyTip").innerText = "商品数据加载失败！";
+                return;
+            }
+
+            let targetGoods = null;
+            const categories = Object.keys(orderData[game] || {});
+            for (let cate of categories) {
+                const goodsList = orderData[game][cate] || [];
+                targetGoods = goodsList.find(item => item[4] === code);
+                if (targetGoods) break;
+            }
+
+            if (targetGoods) {
+                renderGoods(targetGoods, game, code);
+            } else {
+                document.getElementById("emptyTip").innerText = "未找到该商品！";
+            }
+        };
+
+        function renderGoods(goods, game, code) {
+            const [name, desc, img, price] = goods;
+            // 显示商品信息，隐藏加载提示
+            document.getElementById("goodsInfo").style.display = "block";
+            document.getElementById("emptyTip").style.display = "none";
+            // 赋值渲染
+            document.getElementById("goodsName").innerText = name;
+            document.getElementById("goodsPrice").innerText = `¥${price || 0}`;
+            document.getElementById("goodsDesc").innerText = desc || "暂无商品描述";
+            // 渲染图片
+            const imgDom = document.createElement("img");
+            imgDom.src = img || "";
+            imgDom.onerror = () => { imgDom.style.display = "none"; };
+            document.getElementById("goodsImg").appendChild(imgDom);
+            // 精简复制内容
+            window.goodsOrderInfo = `【${game}】${name} | ¥${price}\n客服微信：${WECHAT}`;
+        }
+
+        function copyOrderInfo() {
+            if (!window.goodsOrderInfo) return;
+            const textArea = document.createElement("textarea");
+            textArea.value = window.goodsOrderInfo;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }</script>
+</body>
+</html>

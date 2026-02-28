@@ -97,6 +97,7 @@ G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\NCZclub.pdb
 G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\NCZclub.genruntimeconfig.cache
 G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\ref\NCZclub.dll
 G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\NCZclub.sourcelink.json
-G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\3mj1g94n32-{0}-xy5dw4kokr-xy5dw4kokr.gz
-G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\h8qci9m7nf-{0}-5b0axjuyqm-5b0axjuyqm.gz
-G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\0cj0uuwgf2-{0}-o6z1mi8b69-o6z1mi8b69.gz
+G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\h8qci9m7nf-{0}-d49p4ndrwq-d49p4ndrwq.gz
+G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\0cj0uuwgf2-{0}-ucl22mp20r-ucl22mp20r.gz
+G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\j3n8thaujo-{0}-zw52g6olqp-zw52g6olqp.gz
+G:\Projects\NCZGameClub\NCZclub\NCZclub\obj\Debug\net10.0\compressed\3mj1g94n32-{0}-o97hth63fm-o97hth63fm.gz
